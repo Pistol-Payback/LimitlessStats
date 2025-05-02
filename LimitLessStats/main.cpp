@@ -37,7 +37,7 @@ bool NVSEPlugin_Load(NVSEInterface* nvse)
 		{
 			SafeWrite32(address + 1, 1);
 		}
-		for (uint32_t address : { 0x66F896, 0x66F8B1, 0x66F8D2, 0x66F8F3, 0x66F914, 0x66F935, 0x66F953, 0x66F974, 0x66F992, 0x66F9B7, 0x66F9D1, 0x66F9EF, 0x66FA10, 0x66FA30 }) {
+		for (uint32_t address : { 0x66F896, 0x66F8B1, 0x66F8D2, 0x66F8F3, 0x66F914, 0x66F935, 0x66F953, 0x66F974, 0x66F992, 0x66F9B0, 0x66F9D1, 0x66F9EF, 0x66FA10, 0x66FA30 }) {
 			uint32_t uiCorrectedAddr = address + 1;
 			uint32_t uiFlags = *(uint32_t*)uiCorrectedAddr;
 			SafeWrite32(uiCorrectedAddr, uiFlags & ~0x10);
