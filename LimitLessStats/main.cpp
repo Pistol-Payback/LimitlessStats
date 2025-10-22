@@ -1,4 +1,5 @@
 #include "nvse/PluginAPI.h"
+#include <algorithm>
 
 NVSEInterface* g_nvseInterface{};
 
@@ -29,7 +30,24 @@ bool NVSEPlugin_Query(const NVSEInterface* nvse, PluginInfo* info)
 
 	return true;
 }
+void SafeWrite8(UInt32 addr, UInt32 data)
+{
+	UInt32	oldProtect;
 
+	VirtualProtect((void*)addr, 4, PAGE_EXECUTE_READWRITE, &oldProtect);
+	*((UInt8*)addr) = data;
+	VirtualProtect((void*)addr, 4, oldProtect, &oldProtect);
+}
+void WriteRelCall(UInt32 jumpSrc, UInt32 jumpTgt)
+{
+	// call rel32
+	SafeWrite8(jumpSrc, 0xE8);
+	SafeWrite32(jumpSrc + 1, jumpTgt - jumpSrc - 1 - 4);
+}
+
+int __fastcall LuckRail(void* apThis, void*, uint32_t auiActorValue) {
+	return (std::min)(10, ThisStdCall<int32_t>(0x66EF20, apThis, auiActorValue));
+}
 bool NVSEPlugin_Load(NVSEInterface* nvse)
 {
 	if (!nvse->isEditor) {
@@ -37,13 +55,21 @@ bool NVSEPlugin_Load(NVSEInterface* nvse)
 		{
 			SafeWrite32(address + 1, 1);
 		}
-		for (uint32_t address : { 0x66F896, 0x66F8B1, 0x66F8D2, 0x66F8F3, 0x66F914, 0x66F935, 0x66F953, 0x66F974, 0x66F992, 0x66F9B0, 0x66F9D1, 0x66F9EF, 0x66FA10, 0x66FA30 }) {
+		for (uint32_t address : {0x66F896, 0x66F8D2, 0x66F8F3, 0x66F914, 0x66F935, 0x66F953, 0x66F974, 0x66F992, 0x66F9B0, 0x66F9D1, 0x66F9EF, 0x66FA10, 0x66FA30 }) {
 			uint32_t uiCorrectedAddr = address + 1;
 			uint32_t uiFlags = *(uint32_t*)uiCorrectedAddr;
 			SafeWrite32(uiCorrectedAddr, uiFlags & ~0x10);
 		}
+		HMODULE hJIP = GetModuleHandle("jip_nvse.dll");
+		if (hJIP) {
+		SafeWrite8(reinterpret_cast<size_t>(hJIP) + 0x113B8 + 1, 0);
+		}
+
+		WriteRelCall(0x733C48, UInt32(LuckRail)); // BlackJack
+
 
 	}
 
 	return true;
 }
+
