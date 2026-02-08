@@ -106,6 +106,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\nvse\nvse\PluginsAPI.cpp" />
     <ClCompile Include="dllmain.c">
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </ForcedIncludeFiles>
@@ -118,6 +119,7 @@
     <None Include="exports.def" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\nvse\nvse\CommandInterface.hpp" />
     <ClInclude Include="..\nvse\nvse\nvse_version.h" />
     <ClInclude Include="..\nvse\nvse\PluginAPI.h" />
     <ClInclude Include="..\nvse\nvse\prefix.h" />

@@ -60,10 +60,19 @@ bool NVSEPlugin_Load(NVSEInterface* nvse)
 			uint32_t uiFlags = *(uint32_t*)uiCorrectedAddr;
 			SafeWrite32(uiCorrectedAddr, uiFlags & ~0x10);
 		}
-		HMODULE hJIP = GetModuleHandle("jip_nvse.dll");
-		if (hJIP) {
-		SafeWrite8(reinterpret_cast<size_t>(hJIP) + 0x113B8 + 1, 0);
+
+		//Only works with 57.30, above versions of 57.56 JIP support limitless stats.
+		const PluginInfo* pInfo = NVSE::cmdTableInterface.GetPluginInfoByName("JIP LN NVSE");
+		if (pInfo && pInfo->version != 5730) {
+
+			HMODULE hJIP = GetModuleHandle("jip_nvse.dll");
+			if (hJIP) { //s_patchInstallState.bigGunsSkill we set 0x410 to 0x400 disabling the kAVFlag_Max100
+				SafeWrite8(reinterpret_cast<size_t>(hJIP) + 0x113B8 + 1, 0);
+			}
+
 		}
+
+
 
 		WriteRelCall(0x733C48, UInt32(LuckRail)); // BlackJack
 
