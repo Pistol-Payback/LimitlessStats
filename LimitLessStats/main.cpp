@@ -63,7 +63,7 @@ bool NVSEPlugin_Load(NVSEInterface* nvse)
 
 		//Only works with 57.30, above versions of 57.56 JIP support limitless stats.
 		const PluginInfo* pInfo = NVSE::cmdTableInterface.GetPluginInfoByName("JIP LN NVSE");
-		if (pInfo && pInfo->version != 5730) {
+		if (pInfo && pInfo->version == 5730) {
 
 			HMODULE hJIP = GetModuleHandle("jip_nvse.dll");
 			if (hJIP) { //s_patchInstallState.bigGunsSkill we set 0x410 to 0x400 disabling the kAVFlag_Max100
@@ -71,8 +71,6 @@ bool NVSEPlugin_Load(NVSEInterface* nvse)
 			}
 
 		}
-
-
 
 		WriteRelCall(0x733C48, UInt32(LuckRail)); // BlackJack
 
