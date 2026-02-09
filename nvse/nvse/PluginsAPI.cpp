@@ -1,0 +1,3 @@
+namespace NVSE {
+	CommandTableInterface cmdTableInterface;
+}
