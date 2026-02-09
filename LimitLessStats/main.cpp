@@ -1,8 +1,6 @@
 #include "nvse/PluginAPI.h"
 #include <algorithm>
 
-NVSEInterface* g_nvseInterface{};
-
 void SafeWrite32(UInt32 addr, UInt32 data)
 {
 	UInt32	oldProtect;
@@ -22,9 +20,9 @@ __forceinline T_Ret ThisStdCall(UInt32 _addr, const void* _this, Args ...args)
 	return ((T_Ret(__thiscall*)(const void*, Args...))_addr)(_this, std::forward<Args>(args)...);
 }
 
-bool NVSEPlugin_Query(const NVSEInterface* nvse, PluginInfo* info)
+bool NVSEPlugin_Query(const NVSE::NVSEInterface* nvse, NVSE::PluginInfo* info)
 {
-	info->infoVersion = PluginInfo::kInfoVersion;
+	info->infoVersion = NVSE::PluginInfo::kInfoVersion;
 	info->name = "LimitlessStats";
 	info->version = 1;
 
@@ -48,8 +46,15 @@ void WriteRelCall(UInt32 jumpSrc, UInt32 jumpTgt)
 int __fastcall LuckRail(void* apThis, void*, uint32_t auiActorValue) {
 	return (std::min)(10, ThisStdCall<int32_t>(0x66EF20, apThis, auiActorValue));
 }
-bool NVSEPlugin_Load(NVSEInterface* nvse)
+bool NVSEPlugin_Load(NVSE::NVSEInterface* nvse)
 {
+
+#ifdef _DEBUG
+	MessageBoxA(NULL, "Attach debugger now", "Debug Pause", MB_OK);
+#endif
+
+	NVSE::MainInterface = nvse;
+
 	if (!nvse->isEditor) {
 		for (uint32_t address : {0x66F425, 0x66F449, 0x66F478, 0x66F49A, 0x66F4BE, 0x66F4E2, 0x66F51E})
 		{
@@ -61,8 +66,10 @@ bool NVSEPlugin_Load(NVSEInterface* nvse)
 			SafeWrite32(uiCorrectedAddr, uiFlags & ~0x10);
 		}
 
+		NVSE::cmdTableInterface = *(NVSE::CommandTableInterface*)NVSE::MainInterface->QueryInterface(kInterface_CommandTable);
+
 		//Only works with 57.30, above versions of 57.56 JIP support limitless stats.
-		const PluginInfo* pInfo = NVSE::cmdTableInterface.GetPluginInfoByName("JIP LN NVSE");
+		const NVSE::PluginInfo* pInfo = NVSE::cmdTableInterface.GetPluginInfoByName("JIP LN NVSE");
 		if (pInfo && pInfo->version == 5730) {
 
 			HMODULE hJIP = GetModuleHandle("jip_nvse.dll");

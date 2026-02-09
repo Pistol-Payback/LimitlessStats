@@ -20,6 +20,9 @@
     <ClInclude Include="..\nvse\nvse\nvse_version.h">
       <Filter>NVSE Interface</Filter>
     </ClInclude>
+    <ClInclude Include="..\nvse\nvse\CoreInterface.hpp">
+      <Filter>NVSE Interface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="exports.def" />

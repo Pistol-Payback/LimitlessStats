@@ -75,7 +75,7 @@
     </Link>
     <PostBuildEvent>
       <Message>Installing DLL...</Message>
-      <Command>copy "$(TargetPath)" "$(FalloutNVPath)\Data\NVSE\Plugins\$(TargetFileName)"</Command>
+      <Command>copy "$(TargetPath)" "G:\Mods\Fallout NV\mods\Limitless Stats Redux\nvse\plugins\$(TargetFileName)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -102,7 +102,7 @@
     </Link>
     <PostBuildEvent>
       <Message>Installing DLL...</Message>
-      <Command>copy "$(TargetPath)" "$(MO2)\mods\Pip-Boy Shading Fix\nvse\plugins\$(TargetFileName)"</Command>
+      <Command>copy "$(TargetPath)" "G:\Mods\Fallout NV\mods\Limitless Stats Redux\nvse\plugins\$(TargetFileName)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -120,6 +120,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\nvse\nvse\CommandInterface.hpp" />
+    <ClInclude Include="..\nvse\nvse\CoreInterface.hpp" />
     <ClInclude Include="..\nvse\nvse\nvse_version.h" />
     <ClInclude Include="..\nvse\nvse\PluginAPI.h" />
     <ClInclude Include="..\nvse\nvse\prefix.h" />

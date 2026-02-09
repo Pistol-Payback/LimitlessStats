@@ -1,5 +1,5 @@
 #pragma once
-
+#include "nvse\CoreInterface.hpp"
 //From Plugins+
 
 struct CommandInfo;
@@ -10,7 +10,6 @@ class TESForm;
 struct ScriptEventList;
 struct ArrayKey;
 namespace PluginAPI { class ArrayAPI; }
-struct PluginInfo;
 
 /**** command table API docs *******************************************************
 *
